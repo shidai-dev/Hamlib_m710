@@ -211,9 +211,9 @@ struct rig_caps icm710_caps =
 #define CONTROLLER_ID 90
 
 #define MD_LSB  "LSB"
-#define MD_USB  "USB"
-#define MD_CW   "CW"
-#define MD_AM   "AM"
+#define MD_USB  "J3E"
+#define MD_CW   "A1A"
+#define MD_AM   "H3E"
 #define MD_FSK  "AFS"
 
 #define CMD_TXFREQ  "TXF"   /* Transmit frequency */
