@@ -1,0 +1,60 @@
+name: Build Hamlib Windows x64 Simple
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows-x64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Hamlib
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            autoconf \
+            automake \
+            autopoint \
+            gettext \
+            libtool \
+            pkg-config \
+            texinfo \
+            help2man \
+            groff \
+            zip \
+            mingw-w64
+
+      - name: Bootstrap
+        run: |
+          ./bootstrap
+
+      - name: Configure for Windows x64
+        run: |
+          ./configure \
+            --host=x86_64-w64-mingw32 \
+            --target=x86_64-w64-mingw32 \
+            --prefix="$PWD/dist/hamlib-windows-x64" \
+            --without-libusb
+
+      - name: Build
+        run: |
+          make -j"$(nproc)"
+
+      - name: Install
+        run: |
+          make install
+
+      - name: Package
+        run: |
+          cd dist
+          zip -r hamlib-windows-x64.zip hamlib-windows-x64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hamlib-windows-x64
+          path: dist/hamlib-windows-x64.zip
